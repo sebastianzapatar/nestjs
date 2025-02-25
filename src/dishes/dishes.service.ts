@@ -1,38 +1,48 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDishDto } from './dto/create-dish.dto';
 import { UpdateDishDto } from './dto/update-dish.dto';
 import dishes,{DishInterface} from './dishes.interface';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Dish } from './entities/dish.entity';
+import { Repository } from 'typeorm';
 @Injectable()
 export class DishesService {
-  private dishesSushi:DishInterface[]=dishes;
-  create(createDishDto: CreateDishDto) {
-    let dish:DishInterface={
-      id:(this.dishesSushi.length+1).toString(),
-      ...createDishDto,
-      createAt:new Date(),
-      updateAt:new Date()
+  constructor(
+    @InjectRepository(Dish)
+    private readonly dishRepository:Repository<Dish>
+  ) {}
+  
+  async create(createDishDto: CreateDishDto) {
+    const product=this.dishRepository.create(createDishDto);
+    await this.dishRepository.save(product);
+    return product;
+  }
+
+ async findAll() {
+    const dishes=await this.dishRepository.find({});
+    return dishes;
+  }
+
+  async findOne(id: string) {
+    const producto=await this.dishRepository.findOneBy({id:id});
+    if(!producto){
+      throw new NotFoundException(`Dish #${id} not found`);
     }
-    this.dishesSushi.push(dish);
-    return createDishDto;
+    return producto;
   }
 
-  findAll() {
-    return this.dishesSushi;
-  }
-
-  findOne(id: string) {
-    let dish=this.dishesSushi.find(dish=>dish.id==id);
-    if(!dish){
-      return {error:"No se encontró el plato"};
+  async update(id: string, updateDishDto: UpdateDishDto) {
+    const product=await this.dishRepository.preload({id:id,...updateDishDto});
+    if(!product){
+      throw new NotFoundException(`Dish #${id} not found`);
     }
-    return dish;
+    await this.dishRepository.save(product);
+    return product;
   }
 
-  update(id: number, updateDishDto: UpdateDishDto) {
-    return `This action updates a #${id} dish`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} dish`;
+  remove(id: string) {
+    const product=this.findOne(id);
+    this.dishRepository.delete({id:id}); 
+    return product;
   }
 }

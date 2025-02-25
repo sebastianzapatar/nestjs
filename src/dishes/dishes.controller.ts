@@ -24,11 +24,11 @@ export class DishesController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateDishDto: UpdateDishDto) {
-    return this.dishesService.update(+id, updateDishDto);
+    return this.dishesService.update(id, updateDishDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.dishesService.remove(+id);
+    return this.dishesService.remove(id);
   }
 }
