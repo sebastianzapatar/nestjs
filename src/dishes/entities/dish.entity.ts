@@ -5,7 +5,8 @@ export class Dish {
     @PrimaryGeneratedColumn('uuid')
     id:string;
     @Column('text',{
-        default:'Manuela va a perder'
+        default:'Manuela va a perder',
+        unique:true
     })
     name?:string;
     @Column('numeric',{

@@ -3,7 +3,7 @@ import { DishesService } from './dishes.service';
 import { CreateDishDto } from './dto/create-dish.dto';
 import { UpdateDishDto } from './dto/update-dish.dto';
 
-@Controller('dishes')
+@Controller('manuelacancele')
 export class DishesController {
   constructor(private readonly dishesService: DishesService) {}
 
@@ -24,11 +24,11 @@ export class DishesController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateDishDto: UpdateDishDto) {
-    return this.dishesService.update(+id, updateDishDto);
+    return this.dishesService.update(id, updateDishDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.dishesService.remove(+id);
+    return this.dishesService.remove(id);
   }
 }
