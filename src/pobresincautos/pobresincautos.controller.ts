@@ -31,4 +31,8 @@ export class PobresincautosController {
   remove(@Param('id') id: string) {
     return this.pobresincautosService.remove(+id);
   }
+  @Post('login')
+  login(@Body() loginDto){
+    return this.pobresincautosService.login(loginDto);
+  }
 }

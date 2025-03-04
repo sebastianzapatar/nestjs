@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreatePobresincautoDto } from './dto/create-pobresincauto.dto';
 import { UpdatePobresincautoDto } from './dto/update-pobresincauto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Pobresincauto } from './entities/pobresincauto.entity';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { LoginAuthDto } from './dto/login.dto';
 @Injectable()
 export class PobresincautosService {
   constructor(
@@ -34,5 +35,22 @@ export class PobresincautosService {
 
   remove(id: number) {
     return `This action removes a #${id} pobresincauto`;
+  }
+  async login(loginDto:LoginAuthDto){
+    try{
+        const {email,password}=loginDto;
+        const user=await this.pobresincautoRepository.findOneBy({email});
+        if(!user){
+          throw new NotFoundException('User not found');
+        }
+        const isPasswordValid=await bcrypt.compare(password,user.password);
+        if(!isPasswordValid){
+          throw new UnauthorizedException('Bad credentials');
+        }
+        return user;
+    }
+    catch(e){
+      throw new UnauthorizedException('Bad credentials');
+    }
   }
 }
