@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Pobresincauto } from './entities/pobresincauto.entity';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from './JwtStrategy';
 
 @Module({
   controllers: [PobresincautosController],
@@ -18,7 +19,7 @@ import { JwtModule } from '@nestjs/jwt';
       return{
         secret:process.env.SECRET_PASSWORD,
         signOptions:{
-          expiresIn:'2h'
+          expiresIn:'1m'
         }
       }
     }

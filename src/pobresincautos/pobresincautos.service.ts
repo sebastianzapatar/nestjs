@@ -3,14 +3,17 @@ import { CreatePobresincautoDto } from './dto/create-pobresincauto.dto';
 import { UpdatePobresincautoDto } from './dto/update-pobresincauto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Pobresincauto } from './entities/pobresincauto.entity';
-import { Not, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { LoginAuthDto } from './dto/login.dto';
+import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from './interfaces/jwtPayload';
 @Injectable()
 export class PobresincautosService {
   constructor(
     @InjectRepository(Pobresincauto)
-    private pobresincautoRepository:Repository<Pobresincauto>
+    private pobresincautoRepository:Repository<Pobresincauto>,
+    private jwtService:JwtService
   ) {}
  async create(createPobresincautoDto: CreatePobresincautoDto) {
     const pobresincauto=this.pobresincautoRepository.create({
@@ -18,9 +21,13 @@ export class PobresincautosService {
       password:await bcrypt.hash(createPobresincautoDto.password,10)
     });
     this.pobresincautoRepository.save(pobresincauto);
+    
+
     return {email:pobresincauto.email};
   }
-
+  private getJwtToken(payload:JwtPayload){
+    return this.jwtService.sign(payload);
+  }
   findAll() {
     return this.pobresincautoRepository.find({});
   }
@@ -47,7 +54,10 @@ export class PobresincautosService {
         if(!isPasswordValid){
           throw new UnauthorizedException('Bad credentials');
         }
-        return user;
+        const {role}=user;
+        const payload:JwtPayload={email,role};
+        const token=this.getJwtToken(payload);
+        return {user,token};
     }
     catch(e){
       throw new UnauthorizedException('Bad credentials');
