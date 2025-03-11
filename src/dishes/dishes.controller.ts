@@ -5,7 +5,7 @@ import { UpdateDishDto } from './dto/update-dish.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { DictadorGuardGuard } from 'src/dictador-guard/dictador-guard.guard';
 
-@Controller('dishes')
+@Controller('manuelacancele')
 export class DishesController {
   constructor(private readonly dishesService: DishesService) {}
 
