@@ -5,9 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Dictator } from './entities/dictator.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './JwtStrategy';
 @Module({
   controllers: [DictatorController],
-  providers: [DictatorService],
+  providers: [DictatorService,JwtStrategy],
   imports: [TypeOrmModule.forFeature([Dictator]),
   PassportModule.register({defaultStrategy:'jwt'}),
   JwtModule.registerAsync({
@@ -22,6 +23,7 @@ import { PassportModule } from '@nestjs/passport';
       }
     }
   })],
-  exports:[TypeOrmModule]
+  exports:[TypeOrmModule,JwtStrategy,PassportModule,
+    DictatorModule]
 })
 export class DictatorModule {}

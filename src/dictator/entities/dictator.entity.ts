@@ -17,7 +17,7 @@ export class Dictator {
     password:string;
 
     @Column('text',{
-        default:'user'
+        default:'Admin'
     })
     rol?:string;
 
