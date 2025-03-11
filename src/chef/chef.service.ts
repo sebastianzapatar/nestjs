@@ -4,12 +4,15 @@ import { UpdateChefDto } from './dto/update-chef.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Chef } from './entities/chef.entity';
 import { Repository } from 'typeorm';
+import { Dish } from 'src/dishes/entities/dish.entity';
 
 @Injectable()
 export class ChefService {
   constructor(
     @InjectRepository(Chef)
-    private readonly chefRepository:Repository<Chef>
+    private readonly chefRepository:Repository<Chef>,
+    @InjectRepository(Dish)
+    private readonly dishRepository:Repository<Dish>
   ){
     
   }
@@ -33,5 +36,13 @@ export class ChefService {
 
   remove(id: string) {
     return `This action removes a #${id} chef`;
+  }
+  async findDishesByChef(chefId: string): Promise<Dish[]> {
+    // Se consulta la base de datos filtrando por la relación 'chef'
+    const dishes = await this.dishRepository.find({
+      where: { chef: { id: chefId } }
+    });
+    
+    return dishes;
   }
 }

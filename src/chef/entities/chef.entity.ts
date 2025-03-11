@@ -1,3 +1,4 @@
+import { Exclude } from "class-transformer";
 import { Dish } from "src/dishes/entities/dish.entity";
 import { BeforeInsert, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
@@ -9,6 +10,8 @@ export class Chef {
     name:string;
     @Column()
     skill:string;
+    
+    @Exclude()
     @OneToMany(()=>Dish,dish=>dish.chef)
     dishes:Dish[];
     @BeforeInsert()

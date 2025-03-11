@@ -9,9 +9,9 @@ import { DictadorGuardGuard } from 'src/dictador-guard/dictador-guard.guard';
 export class DishesController {
   constructor(private readonly dishesService: DishesService) {}
 
-  @Post()
-  create(@Body() createDishDto: CreateDishDto) {
-    return this.dishesService.create(createDishDto);
+  @Post(':chefid')
+  create(@Body() createDishDto: CreateDishDto,@Param('chefid') chefid:string) {
+    return this.dishesService.create(createDishDto,chefid);
   }
 
   @Get()

@@ -1,3 +1,4 @@
+import { Exclude } from "class-transformer";
 import { Chef } from "src/chef/entities/chef.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 @Entity('dishes')
@@ -33,6 +34,7 @@ export class Dish {
     })
     updateAt?:Date;
     
+    @Exclude()
     @ManyToOne(()=>Chef,chef=>chef.dishes)
     chef:Chef;
 }
