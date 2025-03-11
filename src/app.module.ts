@@ -5,6 +5,7 @@ import { DishesModule } from './dishes/dishes.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {ConfigModule} from '@nestjs/config';
 import { DictatorModule } from './dictator/dictator.module';
+import { ChefModule } from './chef/chef.module';
 @Module({
   imports: [DishesModule,ConfigModule.forRoot(),//Me permite usar variables de entorno
     TypeOrmModule.forRoot({//Configuración de la base de datos
@@ -12,7 +13,7 @@ import { DictatorModule } from './dictator/dictator.module';
       url: process.env.DATABASE_URL,
       autoLoadEntities: true,
       synchronize: true, // Recuerda cambiar a false en producción
-    }), DictatorModule],
+    }), DictatorModule, ChefModule],
   controllers: [AppController],
   providers: [AppService],
 })

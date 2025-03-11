@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Chef } from "src/chef/entities/chef.entity";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 @Entity('dishes')
 export class Dish {
     @PrimaryGeneratedColumn('uuid')
@@ -31,4 +32,7 @@ export class Dish {
         default:()=> 'CURRENT_TIMESTAMP'
     })
     updateAt?:Date;
+    
+    @ManyToOne(()=>Chef,chef=>chef.dishes)
+    chef:Chef;
 }
