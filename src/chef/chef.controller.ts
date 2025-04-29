@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ChefService } from './chef.service';
 import { CreateChefDto } from './dto/create-chef.dto';
 import { UpdateChefDto } from './dto/update-chef.dto';
+import { Dish } from 'src/dishes/entities/dish.entity';
 
 @Controller('chef')
 export class ChefController {
@@ -30,5 +31,10 @@ export class ChefController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.chefService.remove(id);
+  }
+  @Get(':chefId/dishes')
+  async getDishesByChef(@Param('chefId') chefId:string): 
+  Promise<Dish[]>{
+    return this.chefService.findDishesByChef(chefId);
   }
 }

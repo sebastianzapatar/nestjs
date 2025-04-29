@@ -9,12 +9,14 @@ import { DictadorGuardGuard } from 'src/dictador-guard/dictador-guard.guard';
 export class DishesController {
   constructor(private readonly dishesService: DishesService) {}
 
-  @Post()
-  create(@Body() createDishDto: CreateDishDto) {
-    return this.dishesService.create(createDishDto);
+  @Post(":chefid")
+  create(@Body() createDishDto: CreateDishDto,@Param(":chefid") 
+  chefid:string) {
+    return this.dishesService.create(createDishDto,chefid);
   }
 
   @Get()
+  @UseGuards(AuthGuard(),DictadorGuardGuard)
   findAll() {
     return this.dishesService.findAll();
   }
@@ -30,7 +32,7 @@ export class DishesController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard(),DictadorGuardGuard)
+  @UseGuards(AuthGuard())
   remove(@Param('id') id: string) {
     return this.dishesService.remove(id);
   }
