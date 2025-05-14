@@ -16,7 +16,6 @@ export class DishesController {
   }
 
   @Get()
-  @UseGuards(AuthGuard(),DictadorGuardGuard)
   findAll() {
     return this.dishesService.findAll();
   }

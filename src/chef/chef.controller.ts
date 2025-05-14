@@ -32,7 +32,7 @@ export class ChefController {
   remove(@Param('id') id: string) {
     return this.chefService.remove(id);
   }
-  @Get(':chefId/dishes')
+  @Get(':chefId/dishes') //localhost:3000/chef/defef858/dishes
   async getDishesByChef(@Param('chefId') chefId:string): 
   Promise<Dish[]>{
     return this.chefService.findDishesByChef(chefId);
